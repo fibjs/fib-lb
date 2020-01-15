@@ -1,0 +1,11 @@
+{
+	"name": "fib-loadbalancer",
+	"version": "1.0.0",
+	"description": "Load balance module for fibjs",
+	"main": "./lib/",
+	"scripts": {
+		"test": "fibos ./test/index.js"
+	},
+	"author": "",
+	"license": "ISC"
+}
