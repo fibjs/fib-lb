@@ -1,13 +1,13 @@
-const http = require('http');
-const url = require('url');
-const net = require('net');
-const coroutine = require('coroutine');
+import http = require('http');
+import url = require('url');
+import net = require('net');
+import coroutine = require('coroutine');
 
-http.timeout = 200;
+(http as any).timeout = 200;
 
-let temp_urls;
+let temp_urls: string[];
 
-function equar(a, b) {
+function equar(a: string[], b: string[]) {
 	if (a.length !== b.length) {
 		return false
 	} else {
@@ -20,11 +20,18 @@ function equar(a, b) {
 	}
 }
 
-let checkUrlsWorker = (urls, health, response, r) => {
+type LoadBalanceParams = Parameters<typeof LoadBalance>[0]
 
-	let _urls = [];
+function checkUrlsWorker (
+	urls: LoadBalanceParams['urls'],
+	health: LoadBalanceParams['health'],
+	response: LoadBalanceParams['response'],
+	r: Class_HttpRepeater
+) {
 
-	coroutine.parallel(urls, function(e) {
+	let _urls: string[] = [];
+
+	coroutine.parallel(urls, function(e: (typeof _urls)[any]) {
 
 		let _url = new net.Url(e);
 		let _rs = _url.resolve(health);
@@ -32,7 +39,7 @@ let checkUrlsWorker = (urls, health, response, r) => {
 		let rs;
 
 		try {
-			rs = http.get(_rs);
+			rs = http.get(_rs.toString());
 		} catch (f) {
 			console.log("URL request timed out : ", e);
 			return;
@@ -60,26 +67,28 @@ let checkUrlsWorker = (urls, health, response, r) => {
 	console.log("CheckUrlsWorker is running, healthy URLs : ", temp_urls);
 }
 
-module.exports = params => {
-
-	let urls, health, response;
-
+function LoadBalance (params: {
+	urls: string[],
+	health?: string,
+	response?: string,
+}) {
 	if (!params) {
 		throw new Error("No Params");
 	}
+
+	const {
+		urls,
+		health = 'health',
+		response = 'true'
+	} = params
 
 	if (!params.urls) {
 		throw new Error("No URLs");
 	}
 
-	urls = params.urls;
-	temp_urls = params.urls;
+	temp_urls = urls;
 
-	response = params.response || 'true';
-
-	health = params.health || "health";
-
-	let r = new http.Repeater(urls);
+	const r = new http.Repeater(urls);
 
 	checkUrlsWorker(urls, health, response, r)
 
@@ -89,3 +98,5 @@ module.exports = params => {
 
 	return r;
 }
+
+export = LoadBalance

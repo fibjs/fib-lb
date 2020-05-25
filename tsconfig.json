@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "declarationDir": "./typings",
+        "noImplicitAny": true,
+        "types": [
+            "@fibjs/types"
+        ]
+    }
+}
