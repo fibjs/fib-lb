@@ -2,7 +2,7 @@ var test = require('test');
 var assert = test.assert;
 var http = require('http');
 const coroutine = require('coroutine');
-var lb = require('../lib/index.js');
+var lb = require('../');
 test.setup();
 
 function runServer(port) {
@@ -86,7 +86,7 @@ describe('fib-lb test', () => {
 
 		coroutine.sleep(1000 * 3);
 
-		assert.deepEqual(r.urls.sort(), ["http://127.0.0.1:8091/", "http://127.0.0.1:8092/", "http://127.0.0.1:8095/", "http://127.0.0.1:8096/"]);
+		assert.deepEqual(r.urls.sort(), [/* "http://127.0.0.1:8091/", */ "http://127.0.0.1:8092/", "http://127.0.0.1:8095/", "http://127.0.0.1:8096/"]);
 
 	});
 

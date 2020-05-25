@@ -2,10 +2,29 @@
 	"name": "fib-loadbalancer",
 	"version": "1.0.0",
 	"description": "Load balance module for fibjs",
-	"main": "./lib/",
+	"main": "./lib",
+	"types": "./typings/index.d.ts",
 	"scripts": {
-		"test": "fibos ./test/index.js"
+		"build": "ftsc src/* --outDir ./lib",
+		"test": "fibjs ./test/index.js",
+		"ci": "npm run build && npm run test"
 	},
 	"author": "",
-	"license": "ISC"
+	"license": "ISC",
+	"devDependencies": {
+		"@fibjs/ci": "^2.3.0",
+		"@fibjs/types": "^0.29.0",
+		"fib-typify": "^0.8.3"
+	},
+	"engines": {
+		"fibjs": ">= 28.0"
+	},
+	"ci": {
+		"type": "travis, appveyor",
+		"version": [
+			"0.28.0",
+			"0.29.0",
+			"0.30.0"
+		]
+	}
 }
